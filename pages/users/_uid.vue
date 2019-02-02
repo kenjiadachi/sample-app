@@ -13,7 +13,7 @@
     h3
       | {{ user.id }}さんの投稿一覧
     ul
-      li(v-for="item in items" :key="item.id")
+      li(v-for="item in userItems" :key="item.id")
         h4
           span
             | {{ item.title }}
@@ -27,29 +27,15 @@
 <script>
   import { mapGetters } from 'vuex';
   export default {
-  head() {
-    return {
-      title: this.user.id
-    }
-  },
-  async asyncData({ route, store, redirect }) {
-    if (store.getters['users'][route.params.uid]) {
-      return;
-    }
-    try {
+    async asyncData({ $route, store }) {
+      if (store.getters['user']) {
+        return;
+      }
+
       await store.dispatch('fetchUserInfo', { id: route.params.uid });
-    } catch (e) {
-      redirect('/');
+    },
+    computed: {
+      ...mapGetters(['user', 'userItems'])
     }
-  },
-  computed: {
-    user() {
-      return this.users[this.$route.params.uid];
-    },
-    items() {
-      return this.userItems[this.$route.params.uid] || [];
-    },
-    ...mapGetters(['users', 'userItems'])
-  }
   };
 </script>
