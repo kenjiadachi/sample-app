@@ -1,31 +1,30 @@
 <template lang="pug">
-  section.container
-    div
-      h3 {{user.id}}
-      img(:src="user.profile_image_url")
+.container
+  .columns
+    .column.is-one-third
+      img.image.is-128x128(:src="user.profile_image_url")
+    .column
+      h1.title {{user.id}}
       p {{user.description || 'No description'}}
-      p
-        nuxt-link(to="/")
-          small
-            b トップへ戻る
-      h3 {{user.id}}さんの投稿一覧
-      ul
-        li(v-for="item in items" :key="item.id")
-          h4
-            span {{item.title}}
-          div {{item.body.slice(0, 130)}}……
-          p
-            a(target="_blank" :href="item.url") {{ item.url }}
-
+      nuxt-link(to="/")
+        small
+          b トップへ戻る
+  h2.subtitle {{user.id}}さんの投稿一覧
+  article-card(
+    v-for="item in items"
+    :key= "item.id"
+    :item="item"
+  )
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
+import ArticleCard from '~/components/ArticleCard.vue'
 
 export default {
   head() {
     return {
-      title: this.user.uid
+      title: this.user.id
     }
   },
   async asyncData({ route, store, redirect }) {
@@ -35,7 +34,7 @@ export default {
     try {
       await store.dispatch('fetchUserInfo', { id: route.params.uid });
     } catch (e) {
-      
+      redirect('/')
     }
   },
   computed: {
@@ -46,6 +45,9 @@ export default {
       return this.userItems[this.$route.params.uid] || [];
     },
     ...mapGetters(['users', 'userItems'])
+  },
+  components: {
+    ArticleCard
   }
 };
 </script>
