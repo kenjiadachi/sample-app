@@ -3,6 +3,9 @@ module.exports = {
   ** Headers of the page
   */
   head: {
+    htmlAttrs: {
+      class: 'has-navbar-fixed-top'
+    },
     title: 'sample-app',
     titleTemplate: '%s | Nuxt.js',
     meta: [
