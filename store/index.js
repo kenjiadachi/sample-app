@@ -3,12 +3,12 @@ import Vuex from 'vuex';
 const store = {
   state: {
     items: [],
-    user: {},
+    users: {},
     userItems: {}
   },
   getters: {
     items: state => state.items,
-    user: state => state.user,
+    users: state => state.users,
     userItems: state => state.userItems
   },
   mutations: {
@@ -16,10 +16,10 @@ const store = {
       state.items = items;
     },
     setUser(state, { user }) {
-      state.user = user;
+      state.users[user.id] = user;
     },
-    setUserItems(state, { items }) {
-      state.userItems = items;
+    setUserItems(state, { user, items }) {
+      state.userItems[user.id] = items;
     }
   },
   actions: {
@@ -31,11 +31,11 @@ const store = {
     },
     async fetchUserInfo({ commit }, { id }) {
       const [user, items] = await Promise.all([
-        this.$axios.$get(`https://qiita.com/api/v2/users/${uid}`),
-        this.$axios.$get(`https://qiita.com/api/v2/items?query=user:${uid}`)
+        this.$axios.$get(`https://qiita.com/api/v2/users/${id}`),
+        this.$axios.$get(`https://qiita.com/api/v2/items?query=user:${id}`)
       ]);
       commit('setUser', { user });
-      commit('setUserItems', { items });
+      commit('setUserItems', { user, items });
     }
   }
 };

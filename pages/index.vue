@@ -11,7 +11,7 @@
             small
               span
                 | by
-              nuxt-link(:to="{ name : 'users-uid', params : { uid : item.user.id }}")
+              nuxt-link(:to="{ name : 'users-id', params : { id : item.user.id }}")
                 | {{ item.user.id }}
           div
             | {{ item.body.slice(0, 130) }}
