@@ -25,25 +25,25 @@ import { mapGetters } from 'vuex';
 export default {
   head() {
     return {
-      title: this.user.id
+      title: this.user.uid
     }
   },
   async asyncData({ route, store, redirect }) {
-    if (store.getters['users'][route.params.id]) {
+    if (store.getters['users'][route.params.uid]) {
       return;
     }
     try {
-      await store.dispatch('fetchUserInfo', { id: route.params.id });
+      await store.dispatch('fetchUserInfo', { id: route.params.uid });
     } catch (e) {
-      redirect('/');
+      
     }
   },
   computed: {
     user() {
-      return this.users[this.$route.params.id];
+      return this.users[this.$route.params.uid];
     },
     items() {
-      return this.userItems[this.$route.params.id] || [];
+      return this.userItems[this.$route.params.uid] || [];
     },
     ...mapGetters(['users', 'userItems'])
   }
